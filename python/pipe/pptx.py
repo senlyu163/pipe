@@ -40,6 +40,10 @@ class PPTX(object):
         if self._illegal_page_num(page_num):
             return self._prs.slides[page_num]
 
+    def del_slide_page(self, index):
+        slides = list(self._prs.slides._sldIdLst)
+        self._prs.slides._sldIdLst.remove(slides[index])
+    
     def save(self, file_path):
         self._prs.save(file_path)
 
