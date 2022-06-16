@@ -1,8 +1,9 @@
 # coding: utf-8
 
 import pptx
-from pptx.slide import Slides
+from pptx.slide import Slides, Slide
 from pptx.chart.data import CategoryDataPoint
+import copy
 
 class PPTX(object):
     def __init__(self, prs=None):
@@ -36,13 +37,20 @@ class PPTX(object):
                     continue
         return False
 
-    def slide(self, page_num=0) -> Slides:
+    def slide(self, page_num=0) -> Slide:
         if self._illegal_page_num(page_num):
             return self._prs.slides[page_num]
 
     def del_slide_page(self, index):
         slides = list(self._prs.slides._sldIdLst)
         self._prs.slides._sldIdLst.remove(slides[index])
+
+    def insert_slide(self, index, new_slide: pptx.oxml.CT_SlideIdList):
+        self._prs.slides._sldIdLst.insert(index, new_slide)
+
+    def dul_slide(self, index) -> pptx.oxml.CT_SlideIdList:
+        sldLst = list(self._prs.slides._sldIdLst)
+        return copy.deepcopy(sldLst[index])
     
     def save(self, file_path):
         self._prs.save(file_path)
