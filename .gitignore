@@ -3,3 +3,5 @@
 *.ppt
 *.xls
 *.pyc
+.idea/*
+.vscode/*
