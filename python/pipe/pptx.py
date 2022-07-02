@@ -54,4 +54,7 @@ class PPTX(object):
     
     def save(self, file_path):
         self._prs.save(file_path)
-
+    
+    @property
+    def pages(self):
+        return self._prs.slides.__len__()
