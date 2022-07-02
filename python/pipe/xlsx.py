@@ -13,9 +13,12 @@ class EXCEL(object):
         self._xl = openpyxl.open(filename, read_only)
         self._curr_ws = None
 
-    def get_sheets_name(self) -> List[str]:
+    def _check_ws(self):
         if self._curr_ws is None:
             raise RuntimeError('Please active worksheet first')
+
+    def get_sheets_name(self) -> List[str]:
+        _check_ws()
         return self._curr_ws.sheetnames
 
     def active_ws_by_name(self, ws_name: str) -> None:
@@ -36,3 +39,8 @@ class EXCEL(object):
             for cell in row:
                 elements.append(cell.value)
         return elements
+    
+    @property
+    def rows(self) -> int:
+        _check_ws()
+        return len(self._curr_ws['A'])
