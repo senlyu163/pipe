@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from openpyxl import load_workbook
 
 class EXCEL(object):
@@ -10,21 +10,21 @@ class EXCEL(object):
         read_only -- Read/Write mode. Default read mode to protect raw data.
         Return: None
         """
-        self._xl = openpyxl.open(filename, read_only)
+        self._xl = load_workbook(filename, read_only)
         self._curr_ws = None
 
     def _check_ws(self):
         if self._curr_ws is None:
             raise RuntimeError('Please active worksheet first')
 
+    @property
     def get_sheets_name(self) -> List[str]:
-        _check_ws()
-        return self._curr_ws.sheetnames
+        return self._xl.sheetnames
 
     def active_ws_by_name(self, ws_name: str) -> None:
         self._curr_ws = self._xl[ws_name]
 
-    def elements_slice(self, start: str, end: str) -> List[int, float, str]:
+    def elements_slice(self, start: str, end: str) -> List[Union[int, float, str]]:
         """Get elements of cell, action like built-in range function in python.
         Notion: [start:end] means double closed region.
         
@@ -42,5 +42,5 @@ class EXCEL(object):
     
     @property
     def rows(self) -> int:
-        _check_ws()
+        self._check_ws()
         return len(self._curr_ws['A'])
