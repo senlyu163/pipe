@@ -72,10 +72,12 @@ def third_page(ppt_handle, excel_handle, person_idx: int):
         if i == 4:
             descrip_pos = "O" + str(nm_idx)
             new_ctx = excel_handle.elements_slice(descrip_pos, descrip_pos)[0]
-            shape.text_frame.vertical_anchor = MSO_ANCHOR.TOP
-            shape.text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
-            shape.text_frame.word_wrap = True
+            # shape.text_frame.auto_size = MSO_AUTO_SIZE.SHAPE_TO_FIT_TEXT
+            # shape.text_frame.word_wrap = True
             shape.text_frame.paragraphs[0].runs[0].text = new_ctx
+            shape.text_frame.paragraphs[0].runs[1].text = "" 
+            shape.text_frame.paragraphs[0].runs[2].text = "" 
+            shape.text_frame.paragraphs[0].runs[3].text = "" 
 
         # if shape.has_text_frame:
         #     print("{} : {}".format(i, shape.text))
