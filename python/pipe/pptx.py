@@ -2,7 +2,7 @@
 
 import pptx
 from pptx.slide import Slides, Slide
-from pptx.chart.data import CategoryDataPoint
+from pptx.chart.data import CategoryDataPoint, CategoryChartData
 import copy
 
 class PPTX(object):
@@ -37,6 +37,21 @@ class PPTX(object):
                     continue
         return False
 
+    def replace_chart_data_at_page(self, at_page=None, new_data: CategoryChartData=None) -> bool:
+        # suppose there have only one chart in the slide page
+        if not new_data or not at_page:
+            raise RuntimeError("Please set the page number and new data, got at_page({}) and new_data({})".format(at_page, new_data))
+
+        if self._illegal_page_num(at_page):
+            shapes = self._prs.slides[at_page].shapes
+            for shape in shapes:
+                if shape.has_chart:
+                    shape.chart.replace_data(new_data)
+                    return True
+                else:
+                    continue
+        return False
+
     def slide(self, page_num=0) -> Slide:
         if self._illegal_page_num(page_num):
             return self._prs.slides[page_num]
@@ -50,7 +65,8 @@ class PPTX(object):
 
     def dul_slide(self, index) -> pptx.oxml.CT_SlideIdList:
         sldLst = list(self._prs.slides._sldIdLst)
-        return copy.deepcopy(sldLst[index])
+        return sldLst[index]
+        # return copy.deepcopy(sldLst[index])
     
     def save(self, file_path):
         self._prs.save(file_path)
