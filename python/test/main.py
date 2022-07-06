@@ -41,6 +41,9 @@ def second_page(ppt_handle, excel_handle, person_idx: int):
             text_pos = "D" + str(nm_idx)
             shape.text_frame.paragraphs[0].runs[0].text = "管理风格特点： "
             shape.text_frame.paragraphs[0].runs[1].text = excel_handle.elements_slice(text_pos, text_pos)[0]
+            print(excel_handle.elements_slice(text_pos, text_pos)[0])
+            shape.text_frame.paragraphs[0].runs[2].text = ""
+            shape.text_frame.paragraphs[0].runs[3].text = ""
         ## description
         if i == 9:
             descrip_pos = "E" + str(nm_idx)
