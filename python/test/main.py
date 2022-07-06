@@ -55,10 +55,24 @@ def third_page(ppt_handle, excel_handle, person_idx: int):
     start_pg = person_idx * 4 + 2
 
     data_lst = excel_handle.elements_slice(data_start, data_end)
+    tag_lst = ['技术职能型', '管理型', '创造创业型', '安全稳定型', '挑战型', '服务型', '生活型', '自主独立型']
+    data_dict = {}
+    for i in range(len(tag_lst)):
+        data_dict[tag_lst[i]] = data_lst[i]
+
+    sorted_data_dict = sorted(data_dict.items(), key=lambda x: x[1], reverse=False)
+
+    sorted_tag_lst = []
+    sorted_data_lst = []
+    for item in sorted_data_dict:
+        sorted_tag_lst.append(item[0])
+        sorted_data_lst.append(item[1])
 
     chart_data = CategoryChartData()
-    chart_data.categories = ['技术职能型', '管理型', '创造创业型', '安全稳定型', '挑战型', '服务型', '生活型', '自主独立型']
-    chart_data.add_series('', data_lst)
+    chart_data.categories = sorted_tag_lst
+    chart_data.add_series('', sorted_data_lst)
+    # chart_data.categories = ['技术职能型', '管理型', '创造创业型', '安全稳定型', '挑战型', '服务型', '生活型', '自主独立型']
+    # chart_data.add_series('', data_lst)
     ppt_handle.replace_chart_data_at_page(start_pg, chart_data)
 
     # replace context
@@ -78,6 +92,7 @@ def third_page(ppt_handle, excel_handle, person_idx: int):
             shape.text_frame.paragraphs[0].runs[1].text = "" 
             shape.text_frame.paragraphs[0].runs[2].text = "" 
             shape.text_frame.paragraphs[0].runs[3].text = "" 
+            shape.text_frame.paragraphs[0].runs[4].text = "" 
 
         # if shape.has_text_frame:
         #     print("{} : {}".format(i, shape.text))
@@ -92,7 +107,8 @@ def fourth_page(ppt_handle, excel_handle, person_idx: int):
     data_lst = excel_handle.elements_slice(data_start, data_end)
 
     chart_data = CategoryChartData()
-    chart_data.categories = ['感情承诺', '理想承诺', '规范承诺', '机会承诺']
+    # chart_data.categories = ['感情承诺', '理想承诺', '规范承诺', '机会承诺']
+    chart_data.categories = ['机会承诺', '规范承诺', '理想承诺', '感情承诺']
     chart_data.add_series('', data_lst)
     ppt_handle.replace_chart_data_at_page(start_pg, chart_data)
 
@@ -106,7 +122,7 @@ def fourth_page(ppt_handle, excel_handle, person_idx: int):
 
 
 def main():
-    excel = EXCEL("raw_data.xlsx", False)
+    excel = EXCEL("raw_data_new.xlsx", False)
     excel.active_ws_by_name(excel.get_sheets_name[1])
     person_num = excel.rows - 2  # sub 2 means dropping the title
     raw = PPTX("raw_ppt.pptx")
