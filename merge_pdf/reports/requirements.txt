@@ -1,0 +1,8 @@
+et-xmlfile==1.1.0
+lxml==4.9.0
+openpyxl==3.0.10
+Pillow==9.1.1
+PyPDF2==2.4.2
+python-pptx==0.6.21
+tqdm==4.64.0
+XlsxWriter==3.0.3
