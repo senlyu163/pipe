@@ -3,6 +3,7 @@ from typing import List, Union
 from openpyxl import load_workbook
 import os
 import tqdm
+from io import BytesIO
 
 class EXCEL(object):
     def __init__(self, filename: str, read_only: bool = True) -> None:
@@ -109,7 +110,37 @@ def main():
             pdf_merged.append(pdf_reader)
             return page_count
 
+        ## regeneration method is the most convenient
+        ## 1. find and read the 32th page, merge the page into partition pdf
+        ## 2. add bookmark at the former base which increase 1
         page_count = merge_file_attach_tags(pdf_merged, page_count, file_list, bookmarks_list, "综合简版报告")
+
+        gen_ordered = "{}-{}".format(name, "团队角色评估报告")
+        page_32_file_path = file_list[bookmarks_list.index(gen_ordered)]
+        page_32_reader = PyPDF2.PdfFileReader(stream=page_32_file_path)
+        page_32 = page_32_reader.pages[-1]
+        wr = PyPDF2.PdfWriter()
+        wr.add_page(page_32)
+
+        stream = BytesIO()
+        wr.write(stream)
+        page_32 = PyPDF2.PdfReader(stream=stream)
+        pdf_merged.append(page_32)
+        page_count += 1
+
+        gen_ordered = "{}-{}".format(name, "FAST高潜人才评估报告")
+        page_53_file_path = file_list[bookmarks_list.index(gen_ordered)]
+        page_53_reader = PyPDF2.PdfFileReader(stream=page_53_file_path)
+        page_53 = page_53_reader.pages[-3]
+        wr = PyPDF2.PdfWriter()
+        wr.add_page(page_53)
+
+        stream = BytesIO()
+        wr.write(stream)
+        page_53 = PyPDF2.PdfReader(stream=stream)
+        pdf_merged.append(page_53)
+        page_count += 1
+
         page_count = merge_file_attach_tags(pdf_merged, page_count, file_list, bookmarks_list, "锐途管理人员人事决策报告")
         page_count = merge_file_attach_tags(pdf_merged, page_count, file_list, bookmarks_list, "心理风险计算机自适应测评面试报告")
         page_count = merge_file_attach_tags(pdf_merged, page_count, file_list, bookmarks_list, "团队角色评估报告")
